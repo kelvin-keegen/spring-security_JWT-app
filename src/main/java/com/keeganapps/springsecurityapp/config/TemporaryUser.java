@@ -1,6 +1,6 @@
 package com.keeganapps.springsecurityapp.config;
 
-import com.keeganapps.springsecurityapp.config.security.PasswordEncoder;
+import com.keeganapps.springsecurityapp.config.security.AppPasswordEncoder;
 import com.keeganapps.springsecurityapp.entity.models.ClientRoles;
 import com.keeganapps.springsecurityapp.entity.tables.ClientUser;
 import com.keeganapps.springsecurityapp.repository.ClientUserRepository;
@@ -15,13 +15,13 @@ public class TemporaryUser {
 
 
     @Bean
-    CommandLineRunner runner (ClientUserRepository clientUserRepository, PasswordEncoder passwordEncoder){
+    CommandLineRunner runner (ClientUserRepository clientUserRepository, AppPasswordEncoder appPasswordEncoder){
         return args -> {
 
             ClientUser defaultUser = new ClientUser(
 
                     "kelvinkeegen17@gmail.com",
-                    passwordEncoder.bCryptPasswordEncoder().encode("1234"),
+                    appPasswordEncoder.bCryptPasswordEncoder().encode("1234"),
                     "Kelvin",
                     "Keegan",
                     ClientRoles.SUPER_USER,
