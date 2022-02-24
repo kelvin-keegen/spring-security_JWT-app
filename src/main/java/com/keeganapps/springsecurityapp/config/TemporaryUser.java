@@ -16,13 +16,13 @@ public class TemporaryUser {
 
 
     @Bean
-    CommandLineRunner runner (ClientUserRepository clientUserRepository, AppPasswordEncoder appPasswordEncoder){
+    CommandLineRunner runner (ClientUserRepository clientUserRepository){
         return args -> {
 
             ClientUser defaultUser = new ClientUser(
 
                     "kelvinkeegen17@gmail.com",
-                    appPasswordEncoder.bCryptPasswordEncoder().encode("12345"),
+                    "$2a$10$wwRRkaNiPN0c2P6lCxVTvO64zcyqC/1PA8o1FHktmhe79Bnzr4Rnm",
                     "Kelvin",
                     "Keegan",
                     ClientRoles.SUPER_USER,
