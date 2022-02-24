@@ -1,5 +1,7 @@
 package com.keeganapps.springsecurityapp.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.keeganapps.springsecurityapp.entity.models.StatusResponseBody;
 import com.keeganapps.springsecurityapp.entity.tables.ClientUser;
 import com.keeganapps.springsecurityapp.service.ClientUserService;
@@ -24,11 +26,13 @@ public class AppController {
     @GetMapping(path = "/")
     public String AWShealthChecker() {
 
-        return new StatusResponseBody(
-                200,
-                "Server health is Good"
-        ).toString();
-
+        ObjectMapper json = new ObjectMapper();
+        try {
+            return json.writeValueAsString(new StatusResponseBody(200,"Server health is good"));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @GetMapping(path = "/api/v1/get-all")

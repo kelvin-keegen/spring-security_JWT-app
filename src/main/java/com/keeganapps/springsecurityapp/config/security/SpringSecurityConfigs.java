@@ -1,9 +1,11 @@
 package com.keeganapps.springsecurityapp.config.security;
 
+import com.keeganapps.springsecurityapp.config.security.filters.JwtCustomUserNamePasswordFilter;
 import com.keeganapps.springsecurityapp.service.ClientDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -25,32 +27,25 @@ public class SpringSecurityConfigs extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
-        auth.authenticationProvider(daoAuthenticationProvider());
+        auth.userDetailsService(clientDetailsService).passwordEncoder(appPasswordEncoder.bCryptPasswordEncoder());
     }
-
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http
-                .cors().and()
-                .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests().antMatchers("/api/v1/get-all/**").permitAll()
-                .anyRequest().authenticated();
+        http.csrf().disable();
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.authorizeRequests().anyRequest().permitAll();
+        http.addFilter(new JwtCustomUserNamePasswordFilter(authenticationManagerBean()));
 
     }
-
 
     @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider() {
+    public AuthenticationManager authenticationManagerBean() throws Exception {
 
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setPasswordEncoder(appPasswordEncoder.bCryptPasswordEncoder());
-        provider.setUserDetailsService(clientDetailsService);
-        return provider;
+        return super.authenticationManager();
     }
+
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
