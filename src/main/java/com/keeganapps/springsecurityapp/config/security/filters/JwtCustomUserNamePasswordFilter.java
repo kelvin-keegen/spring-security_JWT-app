@@ -4,6 +4,9 @@ package com.keeganapps.springsecurityapp.config.security.filters;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.keeganapps.springsecurityapp.utils.TokenFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,13 +20,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.sql.Date;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.stream.Collectors;
-
-import static java.time.LocalDate.*;
 
 public class JwtCustomUserNamePasswordFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -47,16 +43,10 @@ public class JwtCustomUserNamePasswordFilter extends UsernamePasswordAuthenticat
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
 
         // Create Access Token
-
         User loggedInUser = (User) authResult.getPrincipal();
-        Algorithm algorithm = Algorithm.HMAC256("boy".getBytes());
-        String accessToken = JWT.create()
-                .withSubject(loggedInUser.getUsername())
-                .withExpiresAt(Date.valueOf(LocalDate.now().plusDays(5L)))
-                .withIssuer(request.getRequestURL().toString())
-                .withClaim("roles",loggedInUser.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
-                .sign(algorithm);
 
-        response.setHeader("access_token",accessToken);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        new ObjectMapper().writeValue(response.getOutputStream(),new TokenFactory().GenerateTokens(loggedInUser,request));
+
     }
 }
