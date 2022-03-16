@@ -5,14 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.keeganapps.springsecurityapp.config.security.AccessTokenRefresh;
 import com.keeganapps.springsecurityapp.entity.models.StatusResponseBody;
 import com.keeganapps.springsecurityapp.entity.tables.ClientUser;
-import com.keeganapps.springsecurityapp.service.ClientUserService;
+import com.keeganapps.springsecurityapp.service.ClientUserManagementService;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -22,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AppController {
 
-    private final ClientUserService clientUserService;
+    private final ClientUserManagementService clientUserManagementService;
     private final AccessTokenRefresh accessTokenRefresh;
 
 
@@ -37,7 +35,7 @@ public class AppController {
     @GetMapping(path = "/api/v1/get-all")
     public List<ClientUser> Publish_All_ClientUsers() {
 
-        return clientUserService.GetAllUsers();
+        return clientUserManagementService.GetAllUsers();
     }
 
     @PostMapping(path = "api/v1/token-refresh")

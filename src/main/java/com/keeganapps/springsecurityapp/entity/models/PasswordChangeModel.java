@@ -3,14 +3,14 @@ package com.keeganapps.springsecurityapp.entity.models;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
 @AllArgsConstructor
-public class StatusResponseBody {
+public class PasswordChangeModel {
 
-    private int statusCode;
-    private String message;
+    private String oldPassword;
+    private String newPassword;
+    private String confirmPassword;
 
 }

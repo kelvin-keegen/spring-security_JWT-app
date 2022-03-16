@@ -41,7 +41,11 @@ public class JwtCustomAuthorizationFilter extends OncePerRequestFilter {
 
         // Check if request is non-operational
 
-        if (request.getServletPath().equals("/") || request.getServletPath().equals("/api/v1/login") || request.getServletPath().equals("/api/v1/token-refresh")) {
+        if (request.getServletPath().equals("/") || request.getServletPath().equals("/api/v1/login") ||
+                request.getServletPath().equals("/api/v1/token-refresh") ||
+                request.getServletPath().equals("/api/v1/register") ||
+                request.getServletPath().equals("/api/v1/password-reset") ||
+                request.getServletPath().equals("/swagger-ui")) {
 
             filterChain.doFilter(request,response);
         } else {

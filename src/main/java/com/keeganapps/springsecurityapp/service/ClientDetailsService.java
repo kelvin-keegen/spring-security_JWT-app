@@ -17,6 +17,8 @@ public class ClientDetailsService implements UserDetailsService {
 
     private final ClientUserRepository clientUserRepository;
 
+    // Spring security util class for user validation
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
