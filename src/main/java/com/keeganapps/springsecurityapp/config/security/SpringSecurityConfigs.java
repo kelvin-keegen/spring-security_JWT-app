@@ -44,12 +44,16 @@ public class SpringSecurityConfigs extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests().antMatchers("/").permitAll();
+        http.authorizeRequests().antMatchers("/api/v1/register").permitAll();
         http.authorizeRequests().antMatchers("/api/v1/login/**").permitAll();
         http.authorizeRequests().antMatchers("/api/v1/token-refresh").permitAll();
+        http.authorizeRequests().antMatchers("/api/v1/password-reset").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/v1/delete/**").hasAnyAuthority(String.valueOf(ClientRoles.ADMIN));
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(jwtCustomUserNamePasswordFilter);
         http.addFilterBefore(new JwtCustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+
+
     }
 
     @Bean

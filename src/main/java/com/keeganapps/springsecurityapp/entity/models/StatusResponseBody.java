@@ -11,6 +11,11 @@ import lombok.ToString;
 public class StatusResponseBody {
 
     private int statusCode;
+    private Object data;
     private String message;
 
+    public StatusResponseBody(int statusCode, String message) {
+        this.statusCode = statusCode;
+        this.message = message;
+    }
 }

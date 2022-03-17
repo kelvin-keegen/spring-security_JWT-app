@@ -27,6 +27,7 @@ import java.util.Map;
 
 import static java.util.Arrays.stream;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 /**
@@ -44,8 +45,7 @@ public class JwtCustomAuthorizationFilter extends OncePerRequestFilter {
         if (request.getServletPath().equals("/") || request.getServletPath().equals("/api/v1/login") ||
                 request.getServletPath().equals("/api/v1/token-refresh") ||
                 request.getServletPath().equals("/api/v1/register") ||
-                request.getServletPath().equals("/api/v1/password-reset") ||
-                request.getServletPath().equals("/swagger-ui")) {
+                request.getServletPath().equals("/api/v1/password-reset")) {
 
             filterChain.doFilter(request,response);
         } else {
@@ -77,7 +77,7 @@ public class JwtCustomAuthorizationFilter extends OncePerRequestFilter {
                     log.error("Error logging in: {}",exception.getMessage());
                     response.setStatus(FORBIDDEN.value());
                     Map<String,Object> errorMessage = new HashMap<>();
-                    errorMessage.put("status",FORBIDDEN.value());
+                    errorMessage.put("statusCode",FORBIDDEN.value());
                     errorMessage.put("message",exception.getMessage());
                     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                     new ObjectMapper().writeValue(response.getOutputStream(),errorMessage);
@@ -85,7 +85,14 @@ public class JwtCustomAuthorizationFilter extends OncePerRequestFilter {
 
             } else {
 
-                filterChain.doFilter(request,response);
+                log.error("Please check your request, Token not included on request to server. servlet path:{}",request.getServletPath());
+                response.setStatus(FORBIDDEN.value());
+                Map<String,Object> badRequestMessage = new HashMap<>();
+                badRequestMessage.put("statusCode",FORBIDDEN.value());
+                badRequestMessage.put("message","Requested resource is forbidden!");
+                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                new ObjectMapper().writeValue(response.getOutputStream(),badRequestMessage);
+
             }
         }
     }

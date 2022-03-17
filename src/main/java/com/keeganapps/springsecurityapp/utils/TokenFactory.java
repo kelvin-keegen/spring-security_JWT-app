@@ -56,7 +56,7 @@ public class TokenFactory {
         responseBody.put("accessToken",accessToken);
         responseBody.put("refreshToken",refreshToken);
 
-        log.info("Available tokens: {} ",responseBody);
+        log.info("Tokens generated successfully");
 
         return responseBody;
 

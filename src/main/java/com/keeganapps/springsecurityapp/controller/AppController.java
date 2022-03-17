@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -39,9 +40,9 @@ public class AppController {
     }
 
     @PostMapping(path = "api/v1/token-refresh")
-    public String TokenRefresh(HttpServletRequest request) throws IOException {
+    public String TokenRefresh(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        return accessTokenRefresh.RefreshAccessToken(request);
+        return accessTokenRefresh.RefreshAccessToken(request,response);
     }
 
 

@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,40 +32,59 @@ public class AccessTokenRefresh {
 
     private final ClientDetailsService clientDetailsService;
 
-    public String RefreshAccessToken(HttpServletRequest request) throws IOException {
+    public String RefreshAccessToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         String salt = "boy";
 
         String requestHeader = request.getHeader(AUTHORIZATION);
 
-        if (requestHeader.startsWith("Bearer ")) {
+        try {
 
-            try {
+            if (request.getHeader(AUTHORIZATION).startsWith("Bearer ") || requestHeader.isEmpty()) {
 
-                String refreshToken = requestHeader.substring("Bearer ".length());
-                Algorithm algorithm = Algorithm.HMAC256(salt.getBytes());
-                JWTVerifier verifier = JWT.require(algorithm).build();
-                DecodedJWT decodedJWT = verifier.verify(refreshToken);
-                String userName = decodedJWT.getSubject();
-                User user = (User) clientDetailsService.loadUserByUsername(userName);
+                try {
 
-               return new ObjectMapper().writeValueAsString(new TokenFactory().GenerateTokens(user,request));
+                    String refreshToken = requestHeader.substring("Bearer ".length());
+                    Algorithm algorithm = Algorithm.HMAC256(salt.getBytes());
+                    JWTVerifier verifier = JWT.require(algorithm).build();
+                    DecodedJWT decodedJWT = verifier.verify(refreshToken);
+                    String userName = decodedJWT.getSubject();
+                    User user = (User) clientDetailsService.loadUserByUsername(userName);
 
-            } catch (Exception exception) {
+                    return new ObjectMapper().writeValueAsString(new TokenFactory().GenerateTokens(user,request));
 
-                // responding with an error
-                log.error("Error logging in: {}",exception.getMessage());
+                } catch (Exception exception) {
+
+                    // responding with an error from JWT
+                    log.error("Error logging in: {}",exception.getMessage());
+                    Map<String,Object> errorMessage = new HashMap<>();
+                    errorMessage.put("statusCode",FORBIDDEN.value());
+                    errorMessage.put("message",exception.getMessage());
+                    return new ObjectMapper().writeValueAsString(errorMessage);
+                }
+
+            } else {
+
+                log.error("Something went wrong: Authorization header might have an invalid prefix, Please check the request");
                 Map<String,Object> errorMessage = new HashMap<>();
-                errorMessage.put("status",FORBIDDEN.value());
-                errorMessage.put("message",exception.getMessage());
-               return new ObjectMapper().writeValueAsString(errorMessage);
+                errorMessage.put("statusCode",FORBIDDEN.value());
+                errorMessage.put("message","Something went wrong, Please check the request");
+                return new ObjectMapper().writeValueAsString(errorMessage);
+
             }
 
-        } else {
 
-            log.error("Something went wrong, Please check the request");
-            throw new RuntimeException("Something went wrong, Please check the request");
+        } catch (Exception exception) {
+
+            log.error("[Exception caught], Please check the request. There might be no Authorization header");
+            response.setStatus(FORBIDDEN.value());
+            Map<String,Object> errorMessage = new HashMap<>();
+            errorMessage.put("statusCode",FORBIDDEN.value());
+            errorMessage.put("message","Something went wrong, Please check the request");
+            return new ObjectMapper().writeValueAsString(errorMessage);
         }
+
+
 
     }
 
