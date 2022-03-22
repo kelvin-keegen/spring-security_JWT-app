@@ -3,6 +3,8 @@ package com.keeganapps.springsecurityapp.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.keeganapps.springsecurityapp.config.security.AccessTokenRefresh;
+import com.keeganapps.springsecurityapp.entity.models.PasswordChangeModel;
+import com.keeganapps.springsecurityapp.entity.models.RegistrationModel;
 import com.keeganapps.springsecurityapp.entity.models.StatusResponseBody;
 import com.keeganapps.springsecurityapp.entity.tables.ClientUser;
 import com.keeganapps.springsecurityapp.service.ClientUserManagementService;
@@ -33,17 +35,34 @@ public class AppController {
 
     }
 
+    @PostMapping("/api/v1/register")
+    public StatusResponseBody Register_User(@RequestBody RegistrationModel registrationModel) {
+
+        return clientUserManagementService.UserRegistration(registrationModel);
+    }
+
     @GetMapping(path = "/api/v1/get-all")
     public List<ClientUser> Publish_All_ClientUsers() {
 
         return clientUserManagementService.GetAllUsers();
     }
 
-    @PostMapping(path = "api/v1/token-refresh")
+    @PostMapping(path = "/api/v1/token-refresh")
     public String TokenRefresh(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         return accessTokenRefresh.RefreshAccessToken(request,response);
     }
 
+    @PostMapping(path = "/api/v1/password-reset")
+    public StatusResponseBody Password_Reset(@RequestParam String email) {
+
+        return clientUserManagementService.PasswordReset(email);
+    }
+
+    @PostMapping(path = "/api/v1/password-change")
+    public StatusResponseBody Password_Change(@RequestParam String email, @RequestBody PasswordChangeModel passwordChangeModel) {
+
+        return clientUserManagementService.PasswordChange(email,passwordChangeModel);
+    }
 
 }

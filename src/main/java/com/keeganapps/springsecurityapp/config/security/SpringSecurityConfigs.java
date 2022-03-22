@@ -12,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -45,7 +46,7 @@ public class SpringSecurityConfigs extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests().antMatchers("/").permitAll();
         http.authorizeRequests().antMatchers("/api/v1/register").permitAll();
-        http.authorizeRequests().antMatchers("/api/v1/login/**").permitAll();
+        http.authorizeRequests().antMatchers("/api/v1/login").permitAll();
         http.authorizeRequests().antMatchers("/api/v1/token-refresh").permitAll();
         http.authorizeRequests().antMatchers("/api/v1/password-reset").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/v1/delete/**").hasAnyAuthority(String.valueOf(ClientRoles.ADMIN));
@@ -54,6 +55,21 @@ public class SpringSecurityConfigs extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(new JwtCustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 
 
+    }
+
+    // Added ignored URLs for swagger documentation
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring()
+                .antMatchers(
+                        "/v2/api-docs/",
+                        "/v3/api-docs/**",
+                        "/swagger-resources/**",
+                        "/swagger-ui.html/**",
+                        "/swagger-ui/index.html",
+                        "/favicon.ico",
+                        "/swagger-ui/**",
+                        "/webjars/**");
     }
 
     @Bean
