@@ -59,6 +59,7 @@ public class AccessTokenRefresh {
                     log.error("Error logging in: {}",exception.getMessage());
                     Map<String,Object> errorMessage = new HashMap<>();
                     errorMessage.put("statusCode",FORBIDDEN.value());
+                    errorMessage.put("data",null);
                     errorMessage.put("message",exception.getMessage());
                     return new ObjectMapper().writeValueAsString(errorMessage);
                 }
@@ -68,6 +69,7 @@ public class AccessTokenRefresh {
                 log.error("Something went wrong: Authorization header might have an invalid prefix, Please check the request");
                 Map<String,Object> errorMessage = new HashMap<>();
                 errorMessage.put("statusCode",FORBIDDEN.value());
+                errorMessage.put("data",null);
                 errorMessage.put("message","Something went wrong, Please check the request");
                 return new ObjectMapper().writeValueAsString(errorMessage);
 
@@ -80,6 +82,7 @@ public class AccessTokenRefresh {
             response.setStatus(FORBIDDEN.value());
             Map<String,Object> errorMessage = new HashMap<>();
             errorMessage.put("statusCode",FORBIDDEN.value());
+            errorMessage.put("data",null);
             errorMessage.put("message","Something went wrong, Please check the request");
             return new ObjectMapper().writeValueAsString(errorMessage);
         }

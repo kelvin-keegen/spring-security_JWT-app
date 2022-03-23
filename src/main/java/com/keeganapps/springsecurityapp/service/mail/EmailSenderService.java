@@ -16,9 +16,18 @@ import javax.mail.internet.MimeMessage;
 public class EmailSenderService implements EmailSenderInterface {
 
     private final JavaMailSender javaMailSender;
+    private final EmailValidator emailValidator;
 
     @Override
     public void Send(String to, String subject, String actualEmail) {
+
+        boolean isEmailValid = emailValidator.test(to);
+
+        if (!isEmailValid) {
+
+            throw new RuntimeException("Email could not be sent! : Invalid email address");
+
+        }
 
         try {
 

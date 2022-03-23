@@ -78,6 +78,7 @@ public class JwtCustomAuthorizationFilter extends OncePerRequestFilter {
                     response.setStatus(FORBIDDEN.value());
                     Map<String,Object> errorMessage = new HashMap<>();
                     errorMessage.put("statusCode",FORBIDDEN.value());
+                    errorMessage.put("data",null);
                     errorMessage.put("message",exception.getMessage());
                     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                     new ObjectMapper().writeValue(response.getOutputStream(),errorMessage);
@@ -89,6 +90,7 @@ public class JwtCustomAuthorizationFilter extends OncePerRequestFilter {
                 response.setStatus(FORBIDDEN.value());
                 Map<String,Object> badRequestMessage = new HashMap<>();
                 badRequestMessage.put("statusCode",FORBIDDEN.value());
+                badRequestMessage.put("data",null);
                 badRequestMessage.put("message","Requested resource is forbidden!");
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                 new ObjectMapper().writeValue(response.getOutputStream(),badRequestMessage);

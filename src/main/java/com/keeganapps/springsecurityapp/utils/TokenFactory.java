@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class TokenFactory {
 
-    public Map<String,String> GenerateTokens (User user, HttpServletRequest request) {
+    public Map<String,Object> GenerateTokens (User user, HttpServletRequest request) {
 
         String salt = "boy";
 
@@ -52,13 +52,16 @@ public class TokenFactory {
 
         // Sending Response
 
+        Map<String,Object> mainResponse = new HashMap<>();
+        mainResponse.put("statusCode",200);
         Map<String,String> responseBody = new HashMap<>();
         responseBody.put("accessToken",accessToken);
         responseBody.put("refreshToken",refreshToken);
-
+        mainResponse.put("data",responseBody);
+        mainResponse.put("message","Login Successful!");
         log.info("Tokens generated successfully");
 
-        return responseBody;
+        return mainResponse;
 
     }
 

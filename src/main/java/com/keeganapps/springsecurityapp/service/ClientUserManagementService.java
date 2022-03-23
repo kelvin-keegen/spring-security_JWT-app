@@ -9,6 +9,7 @@ import com.keeganapps.springsecurityapp.repository.ClientUserRepository;
 import com.keeganapps.springsecurityapp.service.accountrecovery.PasswordManagement;
 import com.keeganapps.springsecurityapp.service.mail.EmailBuilder;
 import com.keeganapps.springsecurityapp.service.mail.EmailSenderService;
+import com.keeganapps.springsecurityapp.service.mail.EmailValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -30,24 +31,17 @@ public class ClientUserManagementService {
 
 
     // List all users from DB
-    public List<ClientUser> GetAllUsers() {
+    public StatusResponseBody GetAllUsers() {
 
-        return clientUserRepository.findAll();
+        try {
 
-    }
+            return new StatusResponseBody(200,clientUserRepository.findAll(),"Data retrieved");
 
-    // Get a specific client for DB
+        } catch (Exception exception) {
 
-    public ClientUser getClientUser(String userName) {
+            return new StatusResponseBody(500,exception.getMessage());
+        }
 
-       Optional<ClientUser> optionalClientUser = clientUserRepository.findByUsername(userName);
-
-       if (optionalClientUser.isEmpty()) {
-
-           throw new UsernameNotFoundException("User Not found with the username provided");
-       }
-
-        return optionalClientUser.get();
     }
 
     // Register new users
@@ -79,9 +73,18 @@ public class ClientUserManagementService {
                 formattedTime
         );
 
-        clientUserRepository.save(newUser);
-        emailSenderService.Send(registrationModel.getUsername(),"Account successfully created", new EmailBuilder().AccountCreated(registrationModel.getFirstName()));
-        return new StatusResponseBody(200,"Account created successfully");
+        //Catching all nasty exceptions :)
+        try {
+
+            emailSenderService.Send(registrationModel.getUsername(),"Account successfully created", new EmailBuilder().AccountCreated(registrationModel.getFirstName()));
+            clientUserRepository.save(newUser);
+            return new StatusResponseBody(200,"Account created successfully");
+
+        } catch (Exception exception) {
+
+            return new StatusResponseBody(500,exception.getMessage());
+
+        }
     }
 
     // Reset password request service
@@ -92,7 +95,14 @@ public class ClientUserManagementService {
             return new StatusResponseBody(400,"Bad request: Email is empty");
         }
 
-        return passwordManagement.ResetPasswordFunction(email);
+        try {
+
+            return passwordManagement.ResetPasswordFunction(email);
+
+        } catch (Exception exception) {
+
+            return new StatusResponseBody(500,exception.getMessage());
+        }
 
     }
 
@@ -103,6 +113,22 @@ public class ClientUserManagementService {
             return new StatusResponseBody(400,"Bad request: Email is empty or password form is incomplete");
         }
 
-        return passwordManagement.ChangePasswordFunction(email,passwordChangeModel);
+        try {
+
+            return passwordManagement.ChangePasswordFunction(email,passwordChangeModel);
+
+        } catch (Exception exception) {
+
+            return new StatusResponseBody(500,exception.getMessage());
+        }
     }
+
+    public StatusResponseBody TestMail(String email) {
+
+        emailSenderService.Send(email,"TestMail",new EmailBuilder().AccountCreated("User"));
+        return new StatusResponseBody(200,"Email sent successfully");
+    }
+
+
+    // End of Class
 }

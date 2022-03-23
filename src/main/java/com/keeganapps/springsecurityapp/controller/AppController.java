@@ -8,6 +8,10 @@ import com.keeganapps.springsecurityapp.entity.models.RegistrationModel;
 import com.keeganapps.springsecurityapp.entity.models.StatusResponseBody;
 import com.keeganapps.springsecurityapp.entity.tables.ClientUser;
 import com.keeganapps.springsecurityapp.service.ClientUserManagementService;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -42,12 +46,14 @@ public class AppController {
     }
 
     @GetMapping(path = "/api/v1/get-all")
-    public List<ClientUser> Publish_All_ClientUsers() {
+    @SecurityRequirement(name = "API-Security")
+    public StatusResponseBody Publish_All_ClientUsers() {
 
         return clientUserManagementService.GetAllUsers();
     }
 
     @PostMapping(path = "/api/v1/token-refresh")
+    @SecurityRequirement(name = "API-Security")
     public String TokenRefresh(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         return accessTokenRefresh.RefreshAccessToken(request,response);
@@ -60,9 +66,17 @@ public class AppController {
     }
 
     @PostMapping(path = "/api/v1/password-change")
+    @SecurityRequirement(name = "API-Security")
     public StatusResponseBody Password_Change(@RequestParam String email, @RequestBody PasswordChangeModel passwordChangeModel) {
 
         return clientUserManagementService.PasswordChange(email,passwordChangeModel);
+    }
+
+    @PostMapping(path = "/test-mail")
+    @SecurityRequirement(name = "API-Security")
+    public StatusResponseBody TestEmail(String email) {
+
+        return clientUserManagementService.TestMail(email);
     }
 
 }
