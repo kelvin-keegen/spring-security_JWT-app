@@ -11,6 +11,7 @@ import com.keeganapps.springsecurityapp.service.mail.EmailBuilder;
 import com.keeganapps.springsecurityapp.service.mail.EmailSenderService;
 import com.keeganapps.springsecurityapp.service.mail.EmailValidator;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ClientUserManagementService {
 
     private final ClientUserRepository clientUserRepository;
@@ -39,6 +41,7 @@ public class ClientUserManagementService {
 
         } catch (Exception exception) {
 
+            log.error(exception.getMessage());
             return new StatusResponseBody(500,exception.getMessage());
         }
 
@@ -82,6 +85,7 @@ public class ClientUserManagementService {
 
         } catch (Exception exception) {
 
+            log.error(exception.getMessage());
             return new StatusResponseBody(500,exception.getMessage());
 
         }
@@ -101,6 +105,7 @@ public class ClientUserManagementService {
 
         } catch (Exception exception) {
 
+            log.error(exception.getMessage());
             return new StatusResponseBody(500,exception.getMessage());
         }
 
@@ -119,6 +124,7 @@ public class ClientUserManagementService {
 
         } catch (Exception exception) {
 
+            log.error(exception.getMessage());
             return new StatusResponseBody(500,exception.getMessage());
         }
     }

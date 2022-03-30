@@ -8,6 +8,7 @@ import com.keeganapps.springsecurityapp.repository.ClientUserRepository;
 import com.keeganapps.springsecurityapp.service.mail.EmailBuilder;
 import com.keeganapps.springsecurityapp.service.mail.EmailSenderService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PasswordManagement {
 
     private final ClientUserRepository clientUserRepository;
@@ -38,7 +40,7 @@ public class PasswordManagement {
 
         String oldPassword = optionalClientUser.get().getPassword();
 
-        if (oldPassword.equals(appPasswordEncoder.bCryptPasswordEncoder().encode(passwordChangeModel.getOldPassword()))) {
+        if (appPasswordEncoder.bCryptPasswordEncoder().matches(passwordChangeModel.getOldPassword(),oldPassword)) {
 
             if (passwordChangeModel.getNewPassword().equals(passwordChangeModel.getConfirmPassword())){
 
@@ -53,6 +55,9 @@ public class PasswordManagement {
 
                 return new StatusResponseBody(200,"Password has been changed");
 
+            } else {
+
+                return new StatusResponseBody(500,"New password does not match confirmed password");
             }
         }
 
