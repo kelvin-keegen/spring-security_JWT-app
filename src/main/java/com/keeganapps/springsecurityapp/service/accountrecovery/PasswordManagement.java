@@ -50,7 +50,7 @@ public class PasswordManagement {
                         .encode(passwordChangeModel.getConfirmPassword()));
 
 
-                emailSenderService.Send(email,"[Security Alert]:Password Changed",new EmailBuilder().PasswordChanged(optionalClientUser.get().getFirstName()));
+                emailSenderService.Send(email,"[Security Alert]: Password Changed!",new EmailBuilder().PasswordChanged(optionalClientUser.get().getFirstName()));
                 clientUserRepository.save(optionalClientUser.get());
 
                 return new StatusResponseBody(200,"Password has been changed");
@@ -84,7 +84,7 @@ public class PasswordManagement {
                     .bCryptPasswordEncoder()
                     .encode(newRandomPassword));
 
-            emailSenderService.Send(email,"",new EmailBuilder()
+            emailSenderService.Send(email,"[Security Alert]: Password Reset!",new EmailBuilder()
                     .PasswordResetMail(optionalClientUser.get().getFirstName(),newRandomPassword));
         clientUserRepository.save(optionalClientUser.get());
 
