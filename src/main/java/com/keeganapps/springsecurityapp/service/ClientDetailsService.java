@@ -36,11 +36,12 @@ public class ClientDetailsService implements UserDetailsService {
 
             ObjectMapper objectMapper = new ObjectMapper();
 
-         httpServletResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        // httpServletResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
          httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
             try {
-                objectMapper.writeValue(httpServletResponse.getOutputStream(),new StatusResponseBody(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,null,"User Not found with the username provided"));
+                objectMapper.writeValue(httpServletResponse.getOutputStream(),new StatusResponseBody(HttpServletResponse.SC_UNAUTHORIZED,null,"Please check your credentials"));
                 log.error("User Not found with the username provided");
+                throw new UsernameNotFoundException("");
 
             } catch (IOException e) {
 

@@ -79,7 +79,7 @@ public class AccessTokenRefresh {
         } catch (Exception exception) {
 
             log.error("[Exception caught], Please check the request. There might be no Authorization header");
-            response.setStatus(FORBIDDEN.value());
+            //response.setStatus(FORBIDDEN.value());
             Map<String,Object> errorMessage = new HashMap<>();
             errorMessage.put("statusCode",FORBIDDEN.value());
             errorMessage.put("data",null);

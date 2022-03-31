@@ -56,7 +56,7 @@ public class JwtCustomUserNamePasswordFilter extends UsernamePasswordAuthenticat
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
 
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        //response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(),new StatusResponseBody(401,null,"Incorrect username or password"));
     }

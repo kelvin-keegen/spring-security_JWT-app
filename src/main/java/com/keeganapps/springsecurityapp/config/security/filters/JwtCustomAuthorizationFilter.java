@@ -75,7 +75,7 @@ public class JwtCustomAuthorizationFilter extends OncePerRequestFilter {
 
                     // responding with an error
                     log.error("Error logging in: {}",exception.getMessage());
-                    response.setStatus(FORBIDDEN.value());
+                    //response.setStatus(FORBIDDEN.value());
                     Map<String,Object> errorMessage = new HashMap<>();
                     errorMessage.put("statusCode",FORBIDDEN.value());
                     errorMessage.put("data",null);
@@ -87,7 +87,7 @@ public class JwtCustomAuthorizationFilter extends OncePerRequestFilter {
             } else {
 
                 log.error("Please check your request, Token not included on request to server. servlet path:{}",request.getServletPath());
-                response.setStatus(FORBIDDEN.value());
+                //response.setStatus(FORBIDDEN.value());
                 Map<String,Object> badRequestMessage = new HashMap<>();
                 badRequestMessage.put("statusCode",FORBIDDEN.value());
                 badRequestMessage.put("data",null);
