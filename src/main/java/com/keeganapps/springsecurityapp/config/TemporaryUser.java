@@ -10,6 +10,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 @Configuration
 public class TemporaryUser {
@@ -19,6 +22,9 @@ public class TemporaryUser {
     CommandLineRunner runner (ClientUserRepository clientUserRepository){
         return args -> {
 
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String time = dateTimeFormatter.format(LocalDateTime.now(ZoneId.of("GMT")));
+
             ClientUser defaultUser = new ClientUser(
 
                     "kelvinkeegen17@gmail.com",
@@ -26,7 +32,7 @@ public class TemporaryUser {
                     "Kelvin",
                     "Keegan",
                     ClientRoles.SUPER_USER,
-                    LocalDate.now().toString()
+                    time
             );
 
             clientUserRepository.save(defaultUser);

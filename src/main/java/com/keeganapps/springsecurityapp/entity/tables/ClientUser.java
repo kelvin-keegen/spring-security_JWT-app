@@ -18,7 +18,16 @@ import java.util.Collections;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "client_table")
+@Table(
+        name = "client_table",
+        indexes = {
+
+                @Index(name = "usernameIndex",columnList = "username"),
+                @Index(name = "passwordIndex",columnList = "password"),
+                @Index(name = "idIndex",columnList = "id")
+
+        }
+)
 public class ClientUser implements UserDetails {
 
     @SequenceGenerator(
@@ -38,6 +47,7 @@ public class ClientUser implements UserDetails {
     private String password;
     private String firstName;
     private String lastName;
+    @Enumerated(EnumType.STRING)
     private ClientRoles clientRoles;
     private String createdAt;
     private Boolean isAccountNonExpired = true;

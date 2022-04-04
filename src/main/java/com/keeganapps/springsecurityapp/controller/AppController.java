@@ -59,7 +59,7 @@ public class AppController {
         return accessTokenRefresh.RefreshAccessToken(request,response);
     }
 
-    @PostMapping(path = "/api/v1/password-reset")
+    @PatchMapping(path = "/api/v1/password-reset")
     public StatusResponseBody Password_Reset(@RequestParam String email) {
 
         return clientUserManagementService.PasswordReset(email);

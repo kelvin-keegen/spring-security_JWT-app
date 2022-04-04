@@ -35,7 +35,7 @@ public class PasswordManagement {
 
         if (optionalClientUser.isEmpty()) {
 
-            throw new RuntimeException("Email is not found");
+            throw new RuntimeException("Email address is not found");
         }
 
         String oldPassword = optionalClientUser.get().getPassword();
@@ -76,7 +76,7 @@ public class PasswordManagement {
 
             if (optionalClientUser.isEmpty()) {
 
-                throw new RuntimeException("Email is not found");
+                throw new RuntimeException("Email address is not found");
             }
 
             String newRandomPassword = RandomString.make(8);
