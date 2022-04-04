@@ -50,10 +50,7 @@ public class ClientUser implements UserDetails {
     @Enumerated(EnumType.STRING)
     private ClientRoles clientRoles;
     private String createdAt;
-    private Boolean isAccountNonExpired = true;
-    private Boolean isAccountNonLocked = true;
-    private Boolean isCredentialsNonExpired = true;
-    private Boolean isEnabled = true;
+    private Boolean isAccountEnabled = true;
 
     public ClientUser(String username, String password, String firstName, String lastName, ClientRoles clientRoles, String createdAt) {
         this.username = username;
@@ -73,21 +70,21 @@ public class ClientUser implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return isAccountNonExpired;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return isAccountNonLocked;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return isCredentialsNonExpired;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return isEnabled;
+        return isAccountEnabled;
     }
 }
