@@ -2,13 +2,8 @@ package com.keeganapps.springsecurityapp.utils;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -25,7 +20,6 @@ import java.util.stream.Collectors;
  * Created by Kelvin-Keegen on 25/Feb/2022 17:38
  */
 
-@RequiredArgsConstructor
 @Slf4j
 public class TokenFactory {
 

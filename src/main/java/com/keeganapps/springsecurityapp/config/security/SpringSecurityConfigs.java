@@ -101,5 +101,4 @@ public class SpringSecurityConfigs extends WebSecurityConfigurerAdapter {
         return source;
     }
 
-
 }

@@ -6,6 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -50,6 +51,7 @@ public class JwtCustomAuthorizationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request,response);
         } else {
 
+            String salt = "boy";
             // Checking to see if token is present in request
             String authHeader = request.getHeader(AUTHORIZATION);
 
@@ -58,7 +60,7 @@ public class JwtCustomAuthorizationFilter extends OncePerRequestFilter {
                 try {
 
                     String token = authHeader.substring("Bearer ".length());
-                    Algorithm algorithm = Algorithm.HMAC256("boy".getBytes());
+                    Algorithm algorithm = Algorithm.HMAC256(salt.getBytes());
                     JWTVerifier verifier = JWT.require(algorithm).build();
                     DecodedJWT decodedJWT = verifier.verify(token);
                     String userName = decodedJWT.getSubject();

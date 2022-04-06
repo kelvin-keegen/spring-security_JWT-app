@@ -9,6 +9,7 @@ import com.keeganapps.springsecurityapp.service.ClientDetailsService;
 import com.keeganapps.springsecurityapp.utils.TokenFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +36,6 @@ public class AccessTokenRefresh {
     public String RefreshAccessToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         String salt = "boy";
-
         String requestHeader = request.getHeader(AUTHORIZATION);
 
         try {
@@ -75,7 +75,6 @@ public class AccessTokenRefresh {
 
             }
 
-
         } catch (Exception exception) {
 
             log.error("[Exception caught], Please check the request. There might be no Authorization header");
@@ -86,8 +85,6 @@ public class AccessTokenRefresh {
             errorMessage.put("message","Something went wrong, Please check the request");
             return new ObjectMapper().writeValueAsString(errorMessage);
         }
-
-
 
     }
 
