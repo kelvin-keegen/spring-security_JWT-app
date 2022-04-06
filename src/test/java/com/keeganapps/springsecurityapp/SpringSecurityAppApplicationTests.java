@@ -26,10 +26,6 @@ class SpringSecurityAppApplicationTests {
 		config.setStringOutputType("base64");
 		encryptor.setConfig(config);
 
-		String salt = "banana";
-
-		System.out.println(salt +" -> " +encryptor.encrypt(salt));
-
 	}
 
 }
