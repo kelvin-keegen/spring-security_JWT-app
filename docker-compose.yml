@@ -32,6 +32,10 @@ services:
       db-url: jdbc:postgresql://db:5432/auth_db
       db-username: postgres
       db-password: root
+      mail-host: smtp.gmail.com
+      mail-port: 587
+      mail-username:
+      mail-password:
 
     depends_on:
       - db
