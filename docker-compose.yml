@@ -7,7 +7,7 @@ services:
 
     image: postgres
 
-    container_name: jwt_rest_api_db
+    container_name: api_db
 
     environment:
       - POSTGRES_DB=auth_db
@@ -24,9 +24,9 @@ services:
     ports:
       - 7005:7005
 
-    image: kelvinkeegen17/auth-app-api
+    image: kelvinkeegen17/auth_app_api
 
-    container_name: auth_api
+    container_name: auth_app_api
 
     environment:
       db-url: jdbc:postgresql://db:5432/auth_db
