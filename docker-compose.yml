@@ -1,0 +1,56 @@
+services:
+
+  db:
+
+    ports:
+      - 5432:5432
+
+    image: postgres
+
+    container_name: jwt_rest_api_db
+
+    environment:
+      - POSTGRES_DB=auth_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+
+    volumes:
+      - /custom/mount:/var/lib/postgresql/data
+
+    restart: unless-stopped
+
+  backend:
+
+    ports:
+      - 7005:7005
+
+    image: kelvinkeegen17/auth-app-api
+
+    container_name: auth_api
+
+    environment:
+      db-url: jdbc:postgresql://db:5432/auth_db
+      db-username: postgres
+      db-password: root
+
+    depends_on:
+      - db
+
+    restart: unless-stopped
+
+  frontend:
+
+    ports:
+      - 3001:3001
+
+    image: kelvinkeegen17/auth_app_ui
+
+    container_name: auth_app_ui
+
+    environment:
+      api-url: backend:7005
+
+    depends_on:
+      - backend
+
+    restart: unless-stopped
